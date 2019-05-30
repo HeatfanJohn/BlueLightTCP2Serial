@@ -21,7 +21,8 @@ ser.writeTimeout = 0                # timeout for write
 print >>sys.stderr, 'Starting Up Serial Monitor'
 
 try:
-    ser.open()
+    if(ser.isOpen() == False):
+        ser.open()
 
 except Exception, e:
     print >>sys.stderr, "error open serial port: " + str(e)
