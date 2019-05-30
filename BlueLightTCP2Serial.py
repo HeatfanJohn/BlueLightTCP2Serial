@@ -8,6 +8,9 @@ BAUDRATE = 9600
 OFF = "Off"
 ON = "On"
 
+CR = '\r'
+LF = '\n'
+
 LightState = OFF
 
 def SimulateSerialResponse(connection, input):
@@ -32,7 +35,7 @@ try:
     if(ser.isOpen() == False):
         ser.open()
 
-except(Exception, e):
+except Exception, e:
     print >>sys.stderr, "error open serial port: " + str(e)
     exit(1)
 
@@ -48,9 +51,6 @@ if ser.isOpen():
 else:
     print >>sys.stderr, "cannot open serial port "
     exit(1)
-
-CR = '\r'
-LF = '\n'
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
