@@ -90,7 +90,7 @@ while True:
                     
                         if char == CR:
                             print >>sys.stderr, 'Command received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in input)
-                            ser.write(input)
+                            print >>sys.stderr, "%d bytes writen to port %s" % (ser.write(input), SERIALPORT)
                             input = ''
 
             else:
