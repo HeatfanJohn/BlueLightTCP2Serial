@@ -4,8 +4,16 @@ import sys
 import serial, time
 
 SERIALPORT = "/dev/ttyUSB0"
-BAUDRATE = 19200
+BAUDRATE = 9600
+OFF = "Off"
+ON = "On"
 
+LightState = OFF
+
+def SimulateSerialResponse(connection, input):
+    if input.find('?') > 0:
+        connection.send(LF + 'Complete' + CR + LF + 'Plug 0' + LightState + CR)
+    
 ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
 ser.parity = serial.PARITY_NONE     # set parity check: no parity
@@ -24,7 +32,7 @@ try:
     if(ser.isOpen() == False):
         ser.open()
 
-except Exception, e:
+except(Exception, e):
     print >>sys.stderr, "error open serial port: " + str(e)
     exit(1)
 
@@ -82,16 +90,17 @@ while True:
             print >>sys.stderr, 'received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
             if data:
                 for char in data:
-                    if char == LF:
+                    if char == LF:              # Ignore line feed characters
                         continue
 
                     else:
-                        input = input + char
+                        input = input + char    # Append this character onto input
                     
-                        if char == CR:
+                        if char == CR:          # Send input out serial port
                             print >>sys.stderr, 'Command received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in input)
                             print >>sys.stderr, "%d bytes writen to port %s" % (ser.write(input), SERIALPORT)
-                            input = ''
+                            SimulateSerialResponse(connection, input)
+                            input = ''          # Reset input buffer
 
             else:
                 print >>sys.stderr, 'no more data from', client_address
