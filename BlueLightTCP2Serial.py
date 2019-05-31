@@ -15,21 +15,29 @@ LightState = [OFF, OFF, OFF]
 
 def SimulateSerialResponse(connection, input):
     if len(input) == 9:
-        if input[6].isdigit() and int(input[6] <= len(LightState)):
+        if input[6].isdigit() and int(input[6] <= len(LightState)-1):
             if input[7] == '?':
                 connection.send(LF + 'Complete' + CR + LF + \
                     'Plug ' + input[6] + ' ' + LightState[int(input[6])] + CR)
                 return
+
             elif input[7].isdigit():
                 if input[7] == '0':
                     LightState[int(input[6])] = OFF
                 elif input[7] == '1':
-                    LightState[int(input[6])] = OFF
+                    LightState[int(input[6])] = ON
                 else:
                     print >>sys.stderr, 'Invalid on/off state: "' + input + '"'
                     return
+
                 print >>sys.stderr, 'Light ' + input[6] + " turned " + LightState[int(input[6])]
                 return
+            else:
+                print >>sys.stderr, '8th character is not a digit or question mark'
+        else:
+            print >>sys.stderr, '7th character is not a digit or out of range'
+    else:
+        print >>sys.stderr, 'Input is not 9 characters'
     
     print >>sys.stderr, 'Invalid input message: "' + input + '"'
     
