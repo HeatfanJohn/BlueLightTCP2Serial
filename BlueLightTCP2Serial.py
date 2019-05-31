@@ -11,11 +11,27 @@ ON = "On"
 CR = '\r'
 LF = '\n'
 
-LightState = OFF
+LightState = [OFF, OFF, OFF]
 
 def SimulateSerialResponse(connection, input):
-    if input.find('?') > 0:
-        connection.send(LF + 'Complete' + CR + LF + 'Plug 0' + LightState + CR)
+    if len(input) == 9:
+        if input[6].isdigit() and int(input[6] <= len(LightState)):
+            if input[7] == '?':
+                connection.send(LF + 'Complete' + CR + LF + \
+                    'Plug ' + input[6] + ' ' + LightState[int(input[6])] + CR)
+                return
+        elif input[7].isdigit():
+            if input[7] == '0':
+                LightState[int(input[6])] = OFF
+            elif input[7] == '1':
+                LightState[int(input[6])] = OFF
+            else:
+                print 'Invalid on/off state: "' + input + '"'
+                return
+            print 'Light ' + input[6] + " turned " + LightState[int(input[6])]
+            return
+    
+    print 'Invalid input message: "' + input + '"'
     
 ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
