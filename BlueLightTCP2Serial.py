@@ -20,18 +20,18 @@ def SimulateSerialResponse(connection, input):
                 connection.send(LF + 'Complete' + CR + LF + \
                     'Plug ' + input[6] + ' ' + LightState[int(input[6])] + CR)
                 return
-        elif input[7].isdigit():
-            if input[7] == '0':
-                LightState[int(input[6])] = OFF
-            elif input[7] == '1':
-                LightState[int(input[6])] = OFF
-            else:
-                print 'Invalid on/off state: "' + input + '"'
+            elif input[7].isdigit():
+                if input[7] == '0':
+                    LightState[int(input[6])] = OFF
+                elif input[7] == '1':
+                    LightState[int(input[6])] = OFF
+                else:
+                    print >>sys.stderr, 'Invalid on/off state: "' + input + '"'
+                    return
+                print >>sys.stderr, 'Light ' + input[6] + " turned " + LightState[int(input[6])]
                 return
-            print 'Light ' + input[6] + " turned " + LightState[int(input[6])]
-            return
     
-    print 'Invalid input message: "' + input + '"'
+    print >>sys.stderr, 'Invalid input message: "' + input + '"'
     
 ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
