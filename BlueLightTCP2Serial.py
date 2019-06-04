@@ -147,7 +147,4 @@ while True:
         except socket.error, e:
             # Something else happened, handle error, exit, etc.
             print >>sys.stderr, e
-            sys.exit(1)            
-
-        
-
+            sys.exit(1)
