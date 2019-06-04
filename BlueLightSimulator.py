@@ -90,5 +90,5 @@ while True:
                     
                 if char == CR:          # Send input out serial port
                     print >>sys.stderr, 'Command received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in input)
-                    SimulateSerialResponse(connection, input)
+                    SimulateSerialResponse(ser, input)
                     input = ''          # Reset input buffer
