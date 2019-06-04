@@ -49,7 +49,7 @@ def ReadFromSerial( ser, connection ):
         msgLen = len( serialInput )
         while totalSent < msgLen:
             sent = connection.send( serialInput[totalSent:] )
-            print >>sys.stderr, "sent %d bytes to remote connection"
+            print >>sys.stderr, "sent %d bytes to remote connection" % sent
             if sent == 0:
                 raise RuntimeError("socket connection broken")
             totalSent = totalSent + sent
