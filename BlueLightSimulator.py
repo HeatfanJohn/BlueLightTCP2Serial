@@ -15,7 +15,7 @@ def SimulateSerialResponse(ser, input):
     if len(input) == 9:
         if input[6].isdigit() and int(input[6]) <= len(LightState)-1:
             if input[7] == '?':
-                ser.send(LF + 'Complete' + CR + LF + \
+                ser.write(LF + 'Complete' + CR + LF + \
                     'Plug ' + input[6] + ' ' + LightState[int(input[6])] + CR)
                 return
 
