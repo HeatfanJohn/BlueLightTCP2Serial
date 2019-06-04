@@ -73,10 +73,10 @@ else:
     print >>sys.stderr, "cannot open serial port "
     exit(1)
 
+input = ''
 while True:
     # Wait for input - Timeout is set to 5 seconds
 
-    input = ''
     data = ser.read()
 
     if data:
