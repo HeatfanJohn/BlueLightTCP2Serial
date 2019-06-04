@@ -77,7 +77,7 @@ input = ''
 while True:
     # Wait for input - Timeout is set to 5 seconds
 
-    data = ser.read()
+    data = ser.read(128)                # Read up to 128 bytes
 
     if data:
         print >>sys.stderr, 'received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
