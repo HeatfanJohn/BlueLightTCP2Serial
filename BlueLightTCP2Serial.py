@@ -41,13 +41,19 @@ def SimulateSerialResponse(connection, input):
     
     print >>sys.stderr, 'Invalid input message: "' + input + '"'
     
+def ReadFromSerial( ser, connection ):
+    serialInput = ser.read()
+    if serialInput:
+        print >>sys.stderr, 'Serial input "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
+        connection.send( serialInput )
+
 ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
 ser.parity = serial.PARITY_NONE     # set parity check: no parity
 ser.stopbits = serial.STOPBITS_ONE  # number of stop bits
 #ser.timeout = None                 # block read
 #ser.timeout = 0                    # non-block read
-ser.timeout = 2                     # timeout block read
+ser.timeout = 1                     # timeout block read
 ser.xonxoff = False                 # disable software flow control
 ser.rtscts = False                  # disable hardware (RTS/CTS) flow control
 ser.dsrdtr = False                  # disable hardware (DSR/DTR) flow control
@@ -61,7 +67,7 @@ try:
 
 except Exception, e:
     print >>sys.stderr, "error open serial port: " + str(e)
-    exit(1)
+    sys.exit(1)
 
 if ser.isOpen():
 
@@ -74,7 +80,7 @@ if ser.isOpen():
 
 else:
     print >>sys.stderr, "cannot open serial port "
-    exit(1)
+    sys.exit(1)
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -98,18 +104,16 @@ sock.listen(1)
 while True:
     # Wait for a connection
     print >>sys.stderr, 'waiting for a connection'
+
+    # accept() returns an open connection between the server and client
+
     connection, client_address = sock.accept()
+    connection.settimeout(1)    # Make non-blocking with 1 second timeout
     input = ''
+    print >>sys.stderr, 'connection from', client_address
 
-    # accept() returns an open connection between the server and client,
-    # along with the address of the client. The connection is actually a
-    # different socket on another port (assigned by the kernel).
-    # Data is read from the connection with recv() and transmitted with sendall().
-
-    try:
-        print >>sys.stderr, 'connection from', client_address
-
-        while True:
+    while True:
+        try:
             data = connection.recv(4096)
             print >>sys.stderr, 'received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
             if data:
@@ -119,17 +123,23 @@ while True:
 
                     else:
                         input = input + char    # Append this character onto input
-                    
                         if char == CR:          # Send input out serial port
                             print >>sys.stderr, 'Command received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in input)
                             print >>sys.stderr, "%d bytes writen to port %s" % (ser.write(input), SERIALPORT)
-                            SimulateSerialResponse(connection, input)
                             input = ''          # Reset input buffer
-
             else:
                 print >>sys.stderr, 'no more data from', client_address
+                # Clean up the connection
+                connection.close()
                 break
-            
-    finally:
-        # Clean up the connection
-        connection.close()
+
+        except socket.timeout, e:
+            ReadFromSerial( ser, connection )   # Check serial for input and output to TCP
+
+        except socket.error, e:
+            # Something else happened, handle error, exit, etc.
+            print >>sys.stderr, e
+            sys.exit(1)            
+
+        
+

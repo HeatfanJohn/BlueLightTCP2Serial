@@ -1,0 +1,149 @@
+res-len = 00020                                                                
+CNSL:SRDF*183858:Tracks not Committed to the R2 Side: 309302                   
+CNSL:SRDF*183858:R2 is more than 120 seconds old!                              
+CNSL:SRDF*183858:Time that R2 is behind R1: 00:02:06                           
+CNSL:SRDF*183858:R2 Image Capture Time: Wed May 15 18:36:42 2019               
+RDF data is consistent!                                                        
+CNSL:SRDF*183858:R2 Data is Consistent: True                                   
+switch light ON                                                                
+initiateActiveOpen 02                                                          
+CNSL:SRDF*183858:EIS4892- connection requested, IP=@10.240.120.@@4             
+RECEIVE                                                                        
+TSAM-status = 230613000010                                                     
+Open accepted to tsu-transport-id 0000000003                                   
+CNSL:SRDF*183859:EIS4892- connection established, IP=@10.240.120.@@4           
+set keep                                                                       
+TSAM-status = 000000000000                                                     
+190515:190515.18390014:send-buffer: Sending 0000000009 byte message sent to EIS4892                                                                           
+                                                                               
+OUTPUT              Request: 000004047052      Packet: 000005224721           2019-05-15   18:39:00.145 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                                                               
+000005216550:                 002030030002  030030060061  015040040040         
+                                                                               
+send                                                                           
+TSAM-status = 000000000000                                                     
+send-buffer: 0000000009 byte message sent to EIS4892                           
+*1 command send OK                                                             
+190515:190515.18390114:send-buffer: Sending 0000000009 byte message sent to EIS4892                                                                           
+                                                                               
+OUTPUT              Request: 000004047052      Packet: 000005224721           2019-05-15   18:39:01.146 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                                                               
+000005216550:                 002030030002  030030060077  015040040040         
+                                                                               
+send                                                                           
+TSAM-status = 000000000000                                                     
+send-buffer: 0000000009 byte message sent to EIS4892                           
+*? command send OK                                                             
+RECEIVE                                                                        
+TSAM-status = 230613000001                                                     
+                                                                               
+INPUT               Request: 000004047052      Packet: 000005224721           2019-05-15   18:39:02.146 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                                                               
+000005154730:                                                                  
+                                    012103157155                                
+000005154740:   160154145164  145015012120  154165147040  060040117156  015040040040                                                                          
+                                                                               
+>JCompleteMJPlug 0 OnM     
+                            
+
+>Tracks not Committed to the R2 Side;4798;Time that R2 is behind R1;00:00:20;R2
+  Image Capture Time;Wed May 15 18:47:07 2019;R2 Data                           
+is Consistent;True;MJC:\Users\emcsupport>                                      
+                                                                               
+                                                                               
+unstring message                                                               
+uns beg                                                                        
+res-len = 00172                                                                
+uns end - ECC-mes-buf(1)=Tracks not Committed to the R2 Side;4798;Time that R2 
+ is behind R1;00:00:20;R2 Image Capture Time;Wed May 1                          
+5 18:47:07 2019;R2 Data is Consistent;True;MJ@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                          
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                          
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                          
+@@@@@@@@@                                                                      
+res-len = 00020                                                                
+CNSL:SRDF*184737:Tracks not Committed to the R2 Side: 4798                     
+0000000020 is less than 121                                                    
+CNSL:SRDF*184737:Time that R2 is behind R1: 00:00:20                           
+CNSL:SRDF*184737:R2 Image Capture Time: Wed May 15 18:47:07 2019               
+RDF data is consistent!                                                        
+CNSL:SRDF*184737:R2 Data is Consistent: True                                   
+CNSL:SRDF*184737:SRDF/A status OK                                              
+switch light OF                                                                
+initiateActiveOpen 02                                                          
+CNSL:SRDF*184737:EIS4892- connection requested, IP=@10.240.120.@@4             
+RECEIVE                                                                        
+TSAM-status = 230613000010                                                     
+Open accepted to tsu-transport-id 0000000004                                   
+CNSL:SRDF*184738:EIS4892- connection established, IP=@10.240.120.@@4           
+set keep                                                                       
+TSAM-status = 000000000000                                                     
+190515:190515.18473925:send-buffer: Sending 0000000009 byte message sent to EIS4892                                                                           
+                                                                               
+OUTPUT              Request: 000004047052      Packet: 000005224721           2019-05-15   18:47:39.254 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                                                               
+000005216550:                 002030030002  030030060060  015040040040         
+                                                                               
+send                                                                           
+TSAM-status = 000000000000                                                     
+send-buffer: 0000000009 byte message sent to EIS4892                           
+*0 command send OK                           
+190515:190515.18474025:send-buffer: Sending 0000000009 byte message sent to EIS4892                                                                           
+                                                                               
+OUTPUT              Request: 000004047052      Packet: 000005224721           2019-05-15   18:47:40.255 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                                                               
+000005216550:                 002030030002  030030060077  015040040040         
+                                                                               
+send                                                                           
+TSAM-status = 000000000000                                                     
+send-buffer: 0000000009 byte message sent to EIS4892                           
+*? command send OK                                                             
+RECEIVE                                                                        
+TSAM-status = 230613000001                                                     
+                                                                               
+INPUT               Request: 000004047052      Packet: 000005224721           2019-05-15   18:47:41.255 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                                                               
+000005154730:                                                                  
+                                    012103157155                                
+000005154740:   160154145164  145015012120  154165147040  060040117146  146015040040                                                                          
+                                                                               
+>JCompleteMJPlug 0 OffM                                                        
+                                                                               
+                                                                               
+                                                                               
+first3-p3: Plu                                                                 
+w-on-off-p3: Of                                                                
+entire line: JCompleteMJPlug 0 OffM                                            
+                                                                               
+                                                                               
+                                                                               
+CNSL:SRDF*184741:***BLUE LIGHT switched OFF                                    
+TCP close requested for EIS4892           , address 010.240.120.004,received a bad status                                                                     
+TSAM-status = 730613030006                                                     
+RECEIVE                                                                        
+TSAM-status = 230613000011                                                     
+190515:184741.25:TCP Connection close received from tsu-transport-id          4
+                                                                               
+close connection                                                               
+RECEIVE                                                                        
+TSAM-status = 230613000012                                                     
+190515:184743.25:TCP Connection abort received from tsu-transport-id          4
+                                                                               
+close connection                                                               
+CheckSRDFA                                                                     
+190515:190515.18494227:send-buffer: Sending 0000000022 byte message sent to CCLPRDVMAXINF1                                                                    
+                                                                               
+OUTPUT              Request: 000004047052      Packet: 000005224721           2019-05-15   18:49:42.279 EDT                                                   
+                            (E,BDI Format)            (E,BDI Format)           
+                                 
+
+
+       
