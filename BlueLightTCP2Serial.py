@@ -42,9 +42,9 @@ def SimulateSerialResponse(connection, input):
     print >>sys.stderr, 'Invalid input message: "' + input + '"'
     
 def ReadFromSerial( ser, connection ):
-    serialInput = ser.read()
+    serialInput = ser.read(128)
     if serialInput:
-        print >>sys.stderr, 'Serial input "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
+        print >>sys.stderr, 'Serial input "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in serialInput)
         connection.send( serialInput )
 
 ser = serial.Serial(SERIALPORT, BAUDRATE)
