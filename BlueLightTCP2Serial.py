@@ -48,7 +48,7 @@ def ReadFromSerial( ser, connection ):
         connection.send( serialInput )
         totalSent = 0
         msgLen = len( serialInput )
-        while totalsent < MSGLEN:
+        while totalSent < msgLen:
             sent = connection.send(msg[totalSent:])
             print >>sys.stderr, "sent %d bytes to remote connection"
             if sent == 0:
