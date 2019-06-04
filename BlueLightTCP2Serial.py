@@ -46,6 +46,15 @@ def ReadFromSerial( ser, connection ):
     if serialInput:
         print >>sys.stderr, 'Serial input "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in serialInput)
         connection.send( serialInput )
+        totalSent = 0
+        msgLen = len( serialInput )
+        while totalsent < MSGLEN:
+            sent = connection.send(msg[totalSent:])
+            print >>sys.stderr, "sent %d bytes to remote connection"
+            if sent == 0:
+                raise RuntimeError("socket connection broken")
+            totalSent = totalSent + sent
+
 
 ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
