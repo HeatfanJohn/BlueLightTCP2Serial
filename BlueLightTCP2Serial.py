@@ -61,7 +61,7 @@ ser.parity = serial.PARITY_NONE     # set parity check: no parity
 ser.stopbits = serial.STOPBITS_ONE  # number of stop bits
 #ser.timeout = None                 # block read
 #ser.timeout = 0                    # non-block read
-ser.timeout = 1                     # timeout block read
+ser.timeout = 0.2                   # timeout block read
 ser.xonxoff = False                 # disable software flow control
 ser.rtscts = False                  # disable hardware (RTS/CTS) flow control
 ser.dsrdtr = False                  # disable hardware (DSR/DTR) flow control
@@ -116,7 +116,7 @@ while True:
     # accept() returns an open connection between the server and client
 
     connection, client_address = sock.accept()
-    connection.settimeout(1)    # Make non-blocking with 1 second timeout
+    connection.settimeout(0.2)    # Make non-blocking with 0.2 second timeout
     input = ''
     print >>sys.stderr, 'connection from', client_address
 
@@ -148,6 +148,3 @@ while True:
             # Something else happened, handle error, exit, etc.
             print >>sys.stderr, e
             sys.exit(1)            
-
-        
-
