@@ -1,7 +1,9 @@
+""" Read input from a TCP connection
+    and output to a USB Serial port.
+"""
 import socket
 import sys
-
-import serial, time
+import serial
 
 SERIALPORT = "/dev/ttyUSB0"
 BAUDRATE = 9600
@@ -13,42 +15,15 @@ LF = '\n'
 
 LightState = [OFF, OFF, OFF]
 
-def SimulateSerialResponse(connection, input):
-    if len(input) == 9:
-        if input[6].isdigit() and int(input[6]) <= len(LightState)-1:
-            if input[7] == '?':
-                connection.send(LF + 'Complete' + CR + LF + \
-                    'Plug ' + input[6] + ' ' + LightState[int(input[6])] + CR)
-                return
-
-            elif input[7].isdigit():
-                if input[7] == '0':
-                    LightState[int(input[6])] = OFF
-                elif input[7] == '1':
-                    LightState[int(input[6])] = ON
-                else:
-                    print >>sys.stderr, 'Invalid on/off state: "' + input + '"'
-                    return
-
-                print >>sys.stderr, 'Light ' + input[6] + " turned " + LightState[int(input[6])]
-                return
-            else:
-                print >>sys.stderr, '8th character is not a digit or question mark'
-        else:
-            print >>sys.stderr, '7th character is not a digit or out of range'
-    else:
-        print >>sys.stderr, 'Input is not 9 characters'
-    
-    print >>sys.stderr, 'Invalid input message: "' + input + '"'
-    
-def ReadFromSerial( ser, connection ):
+def read_from_serial(ser, connection):
     serialInput = ser.read(128)
     if serialInput:
-        print >>sys.stderr, 'Serial input "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in serialInput)
+        print >>sys.stderr, 'Serial input "%s"' % ':' \
+            .join('{:02x}'.format(ord(c)) for c in serialInput)
         totalSent = 0
-        msgLen = len( serialInput )
+        msgLen = len(serialInput)
         while totalSent < msgLen:
-            sent = connection.send( serialInput[totalSent:] )
+            sent = connection.send(serialInput[totalSent:])
             print >>sys.stderr, "sent %d bytes to remote connection" % sent
             if sent == 0:
                 raise RuntimeError("socket connection broken")
@@ -69,22 +44,12 @@ ser.writeTimeout = 0                # timeout for write
 
 print >>sys.stderr, 'Starting Up Serial Monitor'
 
-try:
-    if(ser.isOpen() == False):
-        ser.open()
-
-except Exception, e:
-    print >>sys.stderr, "error open serial port: " + str(e)
-    sys.exit(1)
+if ser.isOpen() is False:
+    ser.open()
 
 if ser.isOpen():
-
-    try:
-        ser.flushInput()            # flush input buffer, discarding all its contents
-        ser.flushOutput()           # flush output buffer, aborting current output
-
-    except Exception, e:
-        print >>sys.stderr, "error communicating...: " + str(e)
+    ser.flushInput()                # flush input buffer, discarding all its contents
+    ser.flushOutput()               # flush output buffer, aborting current output
 
 else:
     print >>sys.stderr, "cannot open serial port "
@@ -98,10 +63,10 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # and the port number is 1000.
 
 # Bind the socket to port 1000 on all IPv4 addresses
-server_address = ('0.0.0.0', 1000)
+SERVER_ADDRESS = ('0.0.0.0', 1000)
 
-print >>sys.stderr, 'starting up on %s port %s' % server_address
-sock.bind(server_address)
+print >>sys.stderr, 'starting up on %s port %s' % SERVER_ADDRESS
+sock.bind(SERVER_ADDRESS)
 
 # Calling listen() puts the socket into server mode,
 # and accept() waits for an incoming connection.
@@ -132,8 +97,10 @@ while True:
                     else:
                         input = input + char    # Append this character onto input
                         if char == CR:          # Send input out serial port
-                            print >>sys.stderr, 'Command received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in input)
-                            print >>sys.stderr, "%d bytes writen to port %s" % (ser.write(input), SERIALPORT)
+                            print >>sys.stderr, 'Command received "%s"' % ':' \
+                                .join('{:02x}'.format(ord(c)) for c in input)
+                            print >>sys.stderr, \
+                                "%d bytes writen to port %s" % (ser.write(input), SERIALPORT)
                             input = ''          # Reset input buffer
             else:
                 print >>sys.stderr, 'no more data from', client_address
@@ -141,10 +108,10 @@ while True:
                 connection.close()
                 break
 
-        except socket.timeout, e:
-            ReadFromSerial( ser, connection )   # Check serial for input and output to TCP
+        except socket.timeout:
+            read_from_serial(ser, connection)   # Check serial for input and output to TCP
 
-        except socket.error, e:
+        except socket.error, ex:
             # Something else happened, handle error, exit, etc.
-            print >>sys.stderr, e
-            sys.exit(1)            
+            print >>sys.stderr, ex
+            sys.exit(1)

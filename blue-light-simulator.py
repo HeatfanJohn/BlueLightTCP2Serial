@@ -1,5 +1,9 @@
+""" Read input from a USB serial port and simulate a BlackBox Pow-R-Switch IR
+    power switching device and return any simulated respone back out the same
+    USB serial port.
+"""
 import sys
-import serial, time
+import serial
 
 SERIALPORT = "/dev/ttyUSB1"
 BAUDRATE = 9600
@@ -36,9 +40,9 @@ def SimulateSerialResponse(ser, input):
             print >>sys.stderr, '7th character is not a digit or out of range'
     else:
         print >>sys.stderr, 'Input is not 9 characters'
-    
+
     print >>sys.stderr, 'Invalid input message: "' + input + '"'
-    
+
 ser = serial.Serial(SERIALPORT, BAUDRATE)
 ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
 ser.parity = serial.PARITY_NONE     # set parity check: no parity
@@ -53,21 +57,12 @@ ser.writeTimeout = None             # timeout for write - None => non-blocking
 
 print >>sys.stderr, 'Starting up Blue Light Simulator'
 
-try:
-    if(ser.isOpen() == False):
-        ser.open()
-
-except Exception, e:
-    print >>sys.stderr, "error open serial port: " + str(e)
-    exit(1)
+if ser.isOpen() is False:
+    ser.open()
 
 if ser.isOpen():
-    try:
-        ser.flushInput()            # flush input buffer, discarding all its contents
-        ser.flushOutput()           # flush output buffer, aborting current output
-
-    except Exception, e:
-        print >>sys.stderr, "error communicating...: " + str(e)
+    ser.flushInput()            # flush input buffer, discarding all its contents
+    ser.flushOutput()           # flush output buffer, aborting current output
 
 else:
     print >>sys.stderr, "cannot open serial port "
@@ -87,8 +82,9 @@ while True:
 
             else:
                 input = input + char    # Append this character onto input
-                    
+
                 if char == CR:          # Send input out serial port
-                    print >>sys.stderr, 'Command received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in input)
+                    print >>sys.stderr, 'Command received "%s"' % ':' \
+                        .join('{:02x}'.format(ord(c)) for c in input)
                     SimulateSerialResponse(ser, input)
                     input = ''          # Reset input buffer
