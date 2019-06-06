@@ -82,22 +82,22 @@ def blue_light_tcp_2_serial():
     while True:
         # Wait for input - Timeout is set to 0.2 seconds
 
-        data = ser.read(128)                # Read up to 128 bytes
+        data = ser.read(128)        # Read up to 128 bytes
 
         if data:
             print >>sys.stderr, 'received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
             for char in data:
-                if char == LF:              # Ignore line feed characters
+                if char == LF:      # Ignore line feed characters
                     continue
 
                 else:
-                    input_so_far = input_so_far + char    # Append this character onto input
+                    input_so_far = input_so_far + char  # Append this character onto input
 
-                    if char == CR:          # Send input out serial port
+                    if char == CR:  # Send input out serial port
                         print >>sys.stderr, 'Command received "%s"' % ':' \
                             .join('{:02x}'.format(ord(c)) for c in input_so_far)
                         simulate_serial_response(ser, input_so_far, light_state)
-                        input_so_far = ''          # Reset input buffer
+                        input_so_far = ''               # Reset input buffer
 
 if __name__ == '__main__':
     blue_light_tcp_2_serial()
