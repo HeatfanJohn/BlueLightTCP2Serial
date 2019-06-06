@@ -13,26 +13,26 @@ ON = "On"
 CR = '\r'
 LF = '\n'
 
-LightState = [OFF, OFF, OFF]
+light_state = [OFF, OFF, OFF]
 
-def SimulateSerialResponse(ser, input):
+def simulate_serial_response(ser, input):
     if len(input) == 9:
-        if input[6].isdigit() and int(input[6]) <= len(LightState)-1:
+        if input[6].isdigit() and int(input[6]) <= len(light_state)-1:
             if input[7] == '?':
                 ser.write(LF + 'Complete' + CR + LF + \
-                    'Plug ' + input[6] + ' ' + LightState[int(input[6])] + CR)
+                    'Plug ' + input[6] + ' ' + light_state[int(input[6])] + CR)
                 return
 
             elif input[7].isdigit():
                 if input[7] == '0':
-                    LightState[int(input[6])] = OFF
+                    light_state[int(input[6])] = OFF
                 elif input[7] == '1':
-                    LightState[int(input[6])] = ON
+                    light_state[int(input[6])] = ON
                 else:
                     print >>sys.stderr, 'Invalid on/off state: "' + input + '"'
                     return
 
-                print >>sys.stderr, 'Light ' + input[6] + " turned " + LightState[int(input[6])]
+                print >>sys.stderr, 'Light ' + input[6] + " turned " + light_state[int(input[6])]
                 return
             else:
                 print >>sys.stderr, '8th character is not a digit or question mark'
@@ -86,5 +86,5 @@ while True:
                 if char == CR:          # Send input out serial port
                     print >>sys.stderr, 'Command received "%s"' % ':' \
                         .join('{:02x}'.format(ord(c)) for c in input)
-                    SimulateSerialResponse(ser, input)
+                    simulate_serial_response(ser, input)
                     input = ''          # Reset input buffer

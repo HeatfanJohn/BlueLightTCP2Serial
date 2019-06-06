@@ -13,21 +13,19 @@ ON = "On"
 CR = '\r'
 LF = '\n'
 
-LightState = [OFF, OFF, OFF]
-
 def read_from_serial(ser, connection):
-    serialInput = ser.read(128)
-    if serialInput:
+    serial_input = ser.read(128)
+    if serial_input:
         print >>sys.stderr, 'Serial input "%s"' % ':' \
-            .join('{:02x}'.format(ord(c)) for c in serialInput)
-        totalSent = 0
-        msgLen = len(serialInput)
-        while totalSent < msgLen:
-            sent = connection.send(serialInput[totalSent:])
+            .join('{:02x}'.format(ord(c)) for c in serial_input)
+        total_sent = 0
+        msg_len = len(serial_input)
+        while total_sent < msg_len:
+            sent = connection.send(serial_input[total_sent:])
             print >>sys.stderr, "sent %d bytes to remote connection" % sent
             if sent == 0:
                 raise RuntimeError("socket connection broken")
-            totalSent = totalSent + sent
+            total_sent = total_sent + sent
 
 
 ser = serial.Serial(SERIALPORT, BAUDRATE)
