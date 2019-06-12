@@ -163,7 +163,10 @@ def blue_light_tcp_2_serial():
                 # Check serial for input and output to TCP
                 serial_input = read_from_serial(ser, connection)
                 for char in serial_input:
-                    if char == CR:
+                    if char == LF:              # Ignore line feed characters
+                        continue
+
+                    elif char == CR:
                         change_state(serial_data, light_state)
                         serial_data = ''
                     else:
