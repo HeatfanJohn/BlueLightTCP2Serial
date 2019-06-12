@@ -1,13 +1,14 @@
 """ Bidirectionally read/write date from a TCP connection
     and echo to a USB Serial port.
 """
+import os
+import datetime
 import socket
 import sys
 import serial
-import os
 
 import pygame
-from pygame.locals import *
+from pygame.locals import QUIT
 
 os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
 
@@ -18,6 +19,14 @@ ON = "On"
 
 CR = '\r'
 LF = '\n'
+
+# set up the color constants
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+CYAN = (0, 255, 255)
 
 # Bind the socket to port 1000 on all IPv4 addresses
 SERVER_ADDRESS = ('0.0.0.0', 1000)
@@ -44,6 +53,13 @@ def read_from_serial(this_serial, this_connection):
     return serial_input
 
 
+def change_state(this_input, this_light_state):
+    """
+    Decode output from serial switch and change state of associated light on/off
+    """
+    print >>sys.stderr, 'change_state() input "%s"' % this_input
+
+
 def blue_light_tcp_2_serial():
     """ Bidirectionally read/write date from a TCP connection
     and echo to a USB Serial port.
@@ -55,17 +71,9 @@ def blue_light_tcp_2_serial():
 
     ## Set up the screen
 
-    DISPLAYSURF = pygame.display.set_mode((320, 240), 0, 16)
+    display_surface = pygame.display.set_mode((320, 240), 0, 16)
     pygame.mouse.set_visible(0)
     pygame.display.set_caption('BlueLightMonitor')
-
-    # set up the colors
-    BLACK = (  0,   0,   0)
-    WHITE = (255, 255, 255)
-    RED   = (255,   0,   0)
-    GREEN = (  0, 255,   0)
-    BLUE  = (  0,   0, 255)
-    CYAN  = (  0, 255, 255)
 
     ser = serial.Serial(SERIALPORT, BAUDRATE)
     ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
@@ -117,6 +125,7 @@ def blue_light_tcp_2_serial():
         connection, client_address = sock.accept()
         connection.settimeout(0.2)    # Make non-blocking with 0.2 second timeout
         input_data = ''
+        serial_data = ''
         print >>sys.stderr, 'connection from', client_address
 
         while True:
@@ -151,7 +160,14 @@ def blue_light_tcp_2_serial():
                     break
 
             except socket.timeout:
-                read_from_serial(ser, connection)   # Check serial for input and output to TCP
+                # Check serial for input and output to TCP
+                serial_input = read_from_serial(ser, connection)
+                for char in serial_input:
+                    if char == CR:
+                        change_state(serial_data, light_state)
+                        serial_data = ''
+                    else:
+                        serial_data = serial_data + char
 
             except socket.error, ex:
                 # Something else happened, handle error, exit, etc.
