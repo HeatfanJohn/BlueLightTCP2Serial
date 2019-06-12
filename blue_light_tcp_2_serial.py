@@ -4,6 +4,12 @@
 import socket
 import sys
 import serial
+import os
+
+import pygame
+from pygame.locals import *
+
+os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
 
 SERIALPORT = "/dev/ttyUSB0"
 BAUDRATE = 9600
@@ -20,7 +26,7 @@ SERVER_ADDRESS = ('0.0.0.0', 1000)
 def read_from_serial(this_serial, this_connection):
     """
     Read input from our USB serial port and output it
-    to the TCP connection being input
+    to the TCP connection currently opened
     """
     serial_input = this_serial.read(128)
     if serial_input:
@@ -35,10 +41,32 @@ def read_from_serial(this_serial, this_connection):
                 raise RuntimeError("socket connection broken")
             total_sent = total_sent + sent
 
+    return serial_input
+
+
 def blue_light_tcp_2_serial():
     """ Bidirectionally read/write date from a TCP connection
     and echo to a USB Serial port.
     """
+
+    light_state = [OFF, OFF, OFF]       # Array to maintain state of each light
+
+    pygame.init()
+
+    ## Set up the screen
+
+    DISPLAYSURF = pygame.display.set_mode((320, 240), 0, 16)
+    pygame.mouse.set_visible(0)
+    pygame.display.set_caption('BlueLightMonitor')
+
+    # set up the colors
+    BLACK = (  0,   0,   0)
+    WHITE = (255, 255, 255)
+    RED   = (255,   0,   0)
+    GREEN = (  0, 255,   0)
+    BLUE  = (  0,   0, 255)
+    CYAN  = (  0, 255, 255)
+
     ser = serial.Serial(SERIALPORT, BAUDRATE)
     ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
     ser.parity = serial.PARITY_NONE     # set parity check: no parity
@@ -92,6 +120,13 @@ def blue_light_tcp_2_serial():
         print >>sys.stderr, 'connection from', client_address
 
         while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            currentime = datetime.datetime.time(datetime.datetime.now())
+
             try:
                 data = connection.recv(4096)
                 print >>sys.stderr, 'received "%s"' % ':' \
