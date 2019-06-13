@@ -134,7 +134,7 @@ def blue_light_tcp_2_serial():
                     pygame.quit()
                     sys.exit()
 
-            currentime = datetime.datetime.time(datetime.datetime.now())
+            last_time = datetime.datetime.time(datetime.datetime.now())
 
             try:
                 data = connection.recv(4096)
@@ -171,6 +171,17 @@ def blue_light_tcp_2_serial():
                         serial_data = ''
                     else:
                         serial_data = serial_data + char
+
+                current_time = datetime.datetime.time(datetime.datetime.now())
+                if current_time != last_time:
+                    ## Draw time
+                    last_time = current_time
+                    font = pygame.font.Font(None, 75)
+                    text = font.render(current_time.strftime("%I:%M %p"), 1, CYAN)
+                    textpos = text.get_rect(center=(display_surface.get_width()/2, 215))
+                    display_surface.blit(text, textpos)
+                    pygame.display.update()    
+
 
             except socket.error, ex:
                 # Something else happened, handle error, exit, etc.
