@@ -180,8 +180,7 @@ def blue_light_tcp_2_serial():
                     text = font.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
                     textpos = text.get_rect(center=(display_surface.get_width()/2, 215))
                     display_surface.blit(text, textpos)
-                    pygame.display.update()    
-
+                    pygame.display.update()
 
             except socket.error, ex:
                 # Something else happened, handle error, exit, etc.
