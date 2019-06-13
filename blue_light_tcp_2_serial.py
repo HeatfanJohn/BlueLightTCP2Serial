@@ -179,6 +179,7 @@ def blue_light_tcp_2_serial():
                     font = pygame.font.Font(None, 75)
                     text = font.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
                     textpos = text.get_rect(center=(display_surface.get_width()/2, 215))
+                    display_surface.blit(textpos, (0, 0))   # Blank time area
                     display_surface.blit(text, textpos)
                     pygame.display.update()
 
