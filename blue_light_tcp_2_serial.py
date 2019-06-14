@@ -59,11 +59,11 @@ def change_state(this_input, this_light_state):
     """
     print >>sys.stderr, 'change_state() input "%s"' % this_input
     # Look for "Plug # On/Off" messages
-    if len(this_input) in [9, 10] and this_input[0:3] == 'Plug':
+    if len(this_input) in [9, 10] and this_input[0:4] == 'Plug':
         if this_input[5].isdigit() and int(this_input[5]) <= len(this_light_state)-1:
-            if this_input[7:8] == 'Of':
+            if this_input[7:9] == 'Of':
                 this_light_state[int(this_input[5])] = OFF
-            elif this_input[7:8] == 'On':
+            elif this_input[7:9] == 'On':
                 this_light_state[int(this_input[5])] = ON
             else:
                 print >>sys.stderr, 'Invalid on/off state: "' + this_input + '"'
