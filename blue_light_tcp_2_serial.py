@@ -58,6 +58,26 @@ def change_state(this_input, this_light_state):
     Decode output from serial switch and change state of associated light on/off
     """
     print >>sys.stderr, 'change_state() input "%s"' % this_input
+    # Look for "Plug # On/Off" messages
+    if len(this_input) in [9, 10] and this_input[0:3] == 'Plug':
+        if this_input[5].isdigit() and int(this_input[5]) <= len(this_light_state)-1:
+            if this_input[7:8] == 'Of':
+                this_light_state[int(this_input[5])] = OFF
+            elif this_input[7:8] == 'On':
+                this_light_state[int(this_input[5])] = ON
+            else:
+                print >>sys.stderr, 'Invalid on/off state: "' + this_input + '"'
+                return
+
+            print >>sys.stderr, 'Light ' + this_input[5] \
+                + " turned " + this_light_state[int(this_input[5])]
+            return
+        else:
+            print >>sys.stderr, 'Input is not a "Plug" message'
+    else:
+        print >>sys.stderr, 'Input is not 9 or 10 characters'
+
+    print >>sys.stderr, 'Unknown input message: "' + this_input + '"'
 
 
 def blue_light_tcp_2_serial():
