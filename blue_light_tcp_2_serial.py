@@ -82,7 +82,7 @@ def change_state(this_input, this_light_state):
 
 
 def update_display(this_surface, this_light_state):
-    """ 
+    """
         Update Pygame display with current light status and date/time
     """
     this_surface.fill(BLACK)
