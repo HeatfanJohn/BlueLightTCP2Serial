@@ -67,17 +67,38 @@ def change_state(this_input, this_light_state):
                 this_light_state[int(this_input[5])] = ON
             else:
                 print >>sys.stderr, 'Invalid on/off state: "' + this_input + '"'
-                return
+                return False
 
             print >>sys.stderr, 'Light ' + this_input[5] \
                 + " turned " + this_light_state[int(this_input[5])]
-            return
+            return True
         else:
             print >>sys.stderr, 'Input is not a "Plug" message'
     else:
         print >>sys.stderr, 'Input is not 9 or 10 characters'
 
     print >>sys.stderr, 'Unknown input message: "' + this_input + '"'
+    return False
+
+
+def update_display(this_surface, this_light_state):
+    """ 
+        Update Pygame display with current light status and date/time
+    """
+    this_surface.fill(BLACK)
+
+    font = pygame.font.Font(None, 75)
+    text = font.render(this_light_state[0] + "  " + \
+        this_light_state[1] + "  " + \
+        this_light_state[2], 1, BLUE)
+    textpos = text.get_rect(center=(this_surface.get_width()/2, 115))
+    this_surface.blit(text, textpos)
+
+    current_time = datetime.datetime.time(datetime.datetime.now())
+    text = font.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
+    textpos = text.get_rect(center=(this_surface.get_width()/2, 215))
+    this_surface.blit(text, textpos)
+    pygame.display.update()
 
 
 def blue_light_tcp_2_serial():
@@ -94,6 +115,7 @@ def blue_light_tcp_2_serial():
     display_surface = pygame.display.set_mode((320, 240), 0, 16)
     pygame.mouse.set_visible(0)
     pygame.display.set_caption('BlueLightMonitor')
+    update_display(display_surface, light_state)
 
     ser = serial.Serial(SERIALPORT, BAUDRATE)
     ser.bytesize = serial.EIGHTBITS     # number of bits per bytes
@@ -154,8 +176,6 @@ def blue_light_tcp_2_serial():
                     pygame.quit()
                     sys.exit()
 
-            last_time = datetime.datetime.time(datetime.datetime.now())
-
             try:
                 data = connection.recv(4096)
                 print >>sys.stderr, 'received "%s"' % ':' \
@@ -187,26 +207,19 @@ def blue_light_tcp_2_serial():
                         continue
 
                     elif char == CR:
-                        change_state(serial_data, light_state)
+                        state_changed = change_state(serial_data, light_state)
                         serial_data = ''
                     else:
                         serial_data = serial_data + char
-
-                current_time = datetime.datetime.time(datetime.datetime.now())
-                if current_time != last_time:
-                    ## Draw time
-                    last_time = current_time
-                    font = pygame.font.Font(None, 75)
-                    text = font.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
-                    textpos = text.get_rect(center=(display_surface.get_width()/2, 215))
-                    display_surface.fill(BLACK)
-                    display_surface.blit(text, textpos)
-                    pygame.display.update()
 
             except socket.error, ex:
                 # Something else happened, handle error, exit, etc.
                 print >>sys.stderr, ex
                 sys.exit(1)
+
+            if state_changed:
+                update_display(display_surface, light_state)
+
 
 if __name__ == '__main__':
     blue_light_tcp_2_serial()
