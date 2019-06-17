@@ -107,6 +107,7 @@ def blue_light_tcp_2_serial():
     """
 
     light_state = [OFF, OFF, OFF]       # Array to maintain state of each light
+    state_changed = False
 
     pygame.init()
 
