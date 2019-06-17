@@ -219,6 +219,7 @@ def blue_light_tcp_2_serial():
                 sys.exit(1)
 
             if state_changed:
+                state_changed = False
                 update_display(display_surface, light_state)
 
 
