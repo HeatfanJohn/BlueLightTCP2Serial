@@ -56,6 +56,17 @@ def read_from_serial(this_serial, this_connection):
 def change_state(this_input, this_light_state):
     """
     Decode output from serial switch and change state of associated light on/off
+
+    We need to decode the output of a Pow-R-Switch IR power switching device to
+    learn the state of each of the three alert lights controlled by these switches.
+
+    The output looks like this:
+
+            Complete
+            Plug 2 On
+
+    We therefore only look for the "Plug" messages and read "On" or "Off" to change
+    the internal state of the associated light in this_list_state.
     """
     print >>sys.stderr, 'change_state() input "%s"' % this_input
     # Look for "Plug # On/Off" messages
@@ -193,7 +204,7 @@ def blue_light_tcp_2_serial():
                                     .join('{:02x}'.format(ord(c)) for c in input_data)
                                 print >>sys.stderr, "%d bytes writen to port %s" \
                                     % (ser.write(input_data), SERIALPORT)
-                                input_data = ''          # Reset input buffer
+                                input_data = ''     # Reset input buffer
                 else:
                     print >>sys.stderr, 'no more data from', client_address
                     # Clean up the connection
@@ -204,7 +215,7 @@ def blue_light_tcp_2_serial():
                 # Check serial for input and output to TCP
                 serial_input = read_from_serial(ser, connection)
                 for char in serial_input:
-                    if char == LF:              # Ignore line feed characters
+                    if char == LF:                  # Ignore line feed characters
                         continue
 
                     elif char == CR:
