@@ -104,8 +104,8 @@ def timestamp():
     """
     Print the current time as a timestamp to sys.stderr
     """
-    current_time = datetime.datetime.time(datetime.datetime.now())
-    print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f: "),
+    current_time = datetime.datetime.now()
+    print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f:"),
 
 
 def update_display(this_surface, this_light_state):
