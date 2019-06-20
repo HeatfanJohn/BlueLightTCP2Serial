@@ -39,12 +39,14 @@ def read_from_serial(this_serial, this_connection):
     """
     serial_input = this_serial.read(128)
     if serial_input:
+        timestamp()
         print >>sys.stderr, 'Serial input "%s"' % ':' \
             .join('{:02x}'.format(ord(c)) for c in serial_input)
         total_sent = 0
         msg_len = len(serial_input)
         while total_sent < msg_len:
             sent = this_connection.send(serial_input[total_sent:])
+            timestamp()
             print >>sys.stderr, "sent %d bytes to remote connection" % sent
             if sent == 0:
                 raise RuntimeError("socket connection broken")
@@ -68,6 +70,7 @@ def change_state(this_input, this_light_state):
     We therefore only look for the "Plug" messages and read "On" or "Off" to change
     the internal state of the associated light in this_list_state.
     """
+    timestamp()
     print >>sys.stderr, 'change_state() input "%s"' % this_input
     # Look for "Plug # On/Off" messages
     if len(this_input) in [9, 10] and this_input[0:4] == 'Plug':
@@ -77,19 +80,32 @@ def change_state(this_input, this_light_state):
             elif this_input[7:9] == 'On':
                 this_light_state[int(this_input[5])] = ON
             else:
+                timestamp()
                 print >>sys.stderr, 'Invalid on/off state: "' + this_input + '"'
                 return False
 
+            timestamp()
             print >>sys.stderr, 'Light ' + this_input[5] \
                 + " turned " + this_light_state[int(this_input[5])]
             return True
         else:
+            timestamp()
             print >>sys.stderr, 'Input is not a "Plug" message'
     else:
+        timestamp()
         print >>sys.stderr, 'Input is not 9 or 10 characters'
 
+    timestamp()
     print >>sys.stderr, 'Unknown input message: "' + this_input + '"'
     return False
+
+
+def timestamp():
+    """
+    Print the current time as a timestamp to sys.stderr
+    """
+    current_time = datetime.datetime.time(datetime.datetime.now())
+    print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f: "),
 
 
 def update_display(this_surface, this_light_state):
@@ -141,6 +157,7 @@ def blue_light_tcp_2_serial():
     ser.dsrdtr = False                  # disable hardware (DSR/DTR) flow control
     ser.writeTimeout = 0                # timeout for write
 
+    timestamp()
     print >>sys.stderr, 'Starting Up Serial Monitor'
 
     if ser.isOpen() is False:
@@ -151,6 +168,7 @@ def blue_light_tcp_2_serial():
         ser.flushOutput()               # flush output buffer, aborting current output
 
     else:
+        timestamp()
         print >>sys.stderr, "cannot open serial port "
         sys.exit(1)
 
@@ -160,7 +178,8 @@ def blue_light_tcp_2_serial():
     # Then bind() is used to associate the socket with the server address.i
     # In this case, the address is localhost, referring to the current server,
     # and the port number is 1000.
-
+    
+    timestamp()
     print >>sys.stderr, 'starting up on %s port %s' % SERVER_ADDRESS
     sock.bind(SERVER_ADDRESS)
 
@@ -172,6 +191,7 @@ def blue_light_tcp_2_serial():
 
     while True:
         # Wait for a connection
+        timestamp()
         print >>sys.stderr, 'waiting for a connection'
 
         # accept() returns an open connection between the server and client
@@ -180,6 +200,7 @@ def blue_light_tcp_2_serial():
         connection.settimeout(0.2)    # Make non-blocking with 0.2 second timeout
         input_data = ''
         serial_data = ''
+        timestamp()
         print >>sys.stderr, 'connection from', client_address
 
         while True:
@@ -190,6 +211,7 @@ def blue_light_tcp_2_serial():
 
             try:
                 data = connection.recv(4096)
+                timestamp()
                 print >>sys.stderr, 'received "%s"' % ':' \
                     .join('{:02x}'.format(ord(c)) for c in data)
                 if data:
@@ -200,12 +222,15 @@ def blue_light_tcp_2_serial():
                         else:
                             input_data = input_data + char    # Append this character onto input
                             if char == CR:          # Send input out serial port
+                                timestamp()
                                 print >>sys.stderr, 'Command received "%s"' % ':' \
                                     .join('{:02x}'.format(ord(c)) for c in input_data)
+                                timestamp()
                                 print >>sys.stderr, "%d bytes writen to port %s" \
                                     % (ser.write(input_data), SERIALPORT)
                                 input_data = ''     # Reset input buffer
                 else:
+                    timestamp()
                     print >>sys.stderr, 'no more data from', client_address
                     # Clean up the connection
                     connection.close()
@@ -226,6 +251,7 @@ def blue_light_tcp_2_serial():
 
             except socket.error, ex:
                 # Something else happened, handle error, exit, etc.
+                timestamp()
                 print >>sys.stderr, ex
                 sys.exit(1)
 
