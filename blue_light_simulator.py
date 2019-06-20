@@ -13,6 +13,15 @@ ON = "On"
 CR = '\r'
 LF = '\n'
 
+
+def timestamp():
+    """
+    Print the current time as a timestamp to sys.stderr
+    """
+    current_time = datetime.datetime.now()
+    print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f:"),
+
+
 def simulate_serial_response(in_serial, in_input, in_light_state):
     """ Simulate a BlackBox Pow-R-Switch IR power switching device
     by analyzing input and return correct simulated respone back out the
@@ -31,19 +40,25 @@ def simulate_serial_response(in_serial, in_input, in_light_state):
                 elif in_input[7] == '1':
                     in_light_state[int(in_input[6])] = ON
                 else:
+                    timestamp()
                     print >>sys.stderr, 'Invalid on/off state: "' + in_input + '"'
                     return
 
+                timestamp()
                 print >>sys.stderr, 'Light ' + in_input[6] \
                     + " turned " + in_light_state[int(in_input[6])]
                 return
             else:
+                timestamp()
                 print >>sys.stderr, '8th character is not a digit or question mark'
         else:
+            timestamp()
             print >>sys.stderr, '7th character is not a digit or out of range'
     else:
+        timestamp()
         print >>sys.stderr, 'Input is not 9 characters'
 
+    timestamp()
     print >>sys.stderr, 'Invalid input message: "' + in_input + '"'
 
 def blue_light_tcp_2_serial():
@@ -65,6 +80,7 @@ def blue_light_tcp_2_serial():
 
     light_state = [OFF, OFF, OFF]
 
+    timestamp()
     print >>sys.stderr, 'Starting up Blue Light Simulator'
 
     if ser.isOpen() is False:
@@ -75,6 +91,7 @@ def blue_light_tcp_2_serial():
         ser.flushOutput()           # flush output buffer, aborting current output
 
     else:
+        timestamp()
         print >>sys.stderr, "cannot open serial port "
         exit(1)
 
@@ -85,6 +102,7 @@ def blue_light_tcp_2_serial():
         data = ser.read(128)        # Read up to 128 bytes
 
         if data:
+            timestamp()
             print >>sys.stderr, 'received "%s"' % ':'.join('{:02x}'.format(ord(c)) for c in data)
             for char in data:
                 if char == LF:      # Ignore line feed characters
@@ -94,6 +112,7 @@ def blue_light_tcp_2_serial():
                     input_so_far = input_so_far + char  # Append this character onto input
 
                     if char == CR:  # Send input out serial port
+                        timestamp()
                         print >>sys.stderr, 'Command received "%s"' % ':' \
                             .join('{:02x}'.format(ord(c)) for c in input_so_far)
                         simulate_serial_response(ser, input_so_far, light_state)
