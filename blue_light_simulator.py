@@ -3,7 +3,9 @@
     USB serial port.
 """
 import sys
+import datetime
 import serial
+
 
 SERIALPORT = "/dev/ttyUSB1"
 BAUDRATE = 9600

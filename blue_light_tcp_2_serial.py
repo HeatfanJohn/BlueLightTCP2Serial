@@ -178,7 +178,7 @@ def blue_light_tcp_2_serial():
     # Then bind() is used to associate the socket with the server address.i
     # In this case, the address is localhost, referring to the current server,
     # and the port number is 1000.
-    
+
     timestamp()
     print >>sys.stderr, 'starting up on %s port %s' % SERVER_ADDRESS
     sock.bind(SERVER_ADDRESS)
