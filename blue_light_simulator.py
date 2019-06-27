@@ -20,8 +20,10 @@ def timestamp():
     """
     Print the current time as a timestamp to sys.stderr
     """
-    current_time = datetime.datetime.now()
-    print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f:"),
+    # When running as a service we no longer need a timestamp
+    if false:
+        current_time = datetime.datetime.now()
+        print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f:"),
 
 
 def simulate_serial_response(in_serial, in_input, in_light_state):
