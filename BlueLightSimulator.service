@@ -1,0 +1,18 @@
+[Unit]
+Description=Service to emulate a BlackBox Pow-R-Switch RS232 controlled power switch
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /home/pi/BlueLightTCP2Serial/blue_light_simulator.py
+Restart=no
+RestartSec=2
+StandardOutput=syslog
+SyslogIdentifier=BlueLightSimulator
+Environment=PATH=/usr/bin:/usr/local/bin:/usr/sbin:/bin
+WorkingDirectory=/home/pi/BlueLightTCP2Serial
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
+
