@@ -105,7 +105,7 @@ def timestamp():
     Print the current time as a timestamp to sys.stderr
     """
     # When running as a service we don't need a timestamp
-    if false:
+    if False:
         current_time = datetime.datetime.now()
         print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f:"),
 
