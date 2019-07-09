@@ -6,7 +6,7 @@ import sys
 import datetime
 import serial
 
-
+DISPLAY_TIMESTAMPS = False
 SERIALPORT = "/dev/ttyUSB1"
 BAUDRATE = 9600
 OFF = "Off"
@@ -21,7 +21,7 @@ def timestamp():
     Print the current time as a timestamp to sys.stderr
     """
     # When running as a service we no longer need a timestamp
-    if False:
+    if DISPLAY_TIMESTAMPS:
         current_time = datetime.datetime.now()
         print >>sys.stderr, current_time.strftime("%Y-%m-%d-%H:%M:%S.%f:"),
 
