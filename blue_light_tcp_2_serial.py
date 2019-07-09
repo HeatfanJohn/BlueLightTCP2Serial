@@ -136,6 +136,9 @@ def blue_light_tcp_2_serial():
     and echo to a USB Serial port.
     """
 
+    timestamp()
+    print >>sys.stderr, 'Starting Up Serial Monitor'
+
     light_state = [OFF, OFF, OFF]       # Array to maintain state of each light
     state_changed = False
 
@@ -159,9 +162,6 @@ def blue_light_tcp_2_serial():
     ser.rtscts = False                  # disable hardware (RTS/CTS) flow control
     ser.dsrdtr = False                  # disable hardware (DSR/DTR) flow control
     ser.writeTimeout = 0                # timeout for write
-
-    timestamp()
-    print >>sys.stderr, 'Starting Up Serial Monitor'
 
     if ser.isOpen() is False:
         ser.open()
