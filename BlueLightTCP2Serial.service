@@ -1,6 +1,5 @@
 [Unit]
-Description=Service to route TCP data to and from RS232 Serial power switch
-After=multi-user.target
+Description=BlueLightTCP2Serial Service to route TCP data to and from RS232 Serial power switch
 
 [Service]
 Type=simple
