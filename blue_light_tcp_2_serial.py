@@ -5,12 +5,12 @@ import os
 import datetime
 import socket
 import sys
+import signal
+import traceback
 import serial
 
 import pygame
 from pygame.locals import QUIT
-
-os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
 
 DISPLAY_TIMESTAMPS = False
 SERIALPORT = "/dev/ttyUSB0"
@@ -131,6 +131,13 @@ def update_display(this_surface, this_light_state):
     pygame.display.update()
 
 
+def handler(signum, frame):
+    """Why is systemd sending sighups? I DON'T KNOW."""
+    timestamp()
+    print >>sys.stderr, "Got a %d signal. Doing nothing" % signum
+    traceback.print_stack(frame)
+
+
 def blue_light_tcp_2_serial():
     """ Bidirectionally read/write date from a TCP connection
     and echo to a USB Serial port.
@@ -139,10 +146,23 @@ def blue_light_tcp_2_serial():
     timestamp()
     print >>sys.stderr, 'Starting Up Serial Monitor'
 
-    light_state = [OFF, OFF, OFF]       # Array to maintain state of each light
+    signal.signal(signal.SIGHUP, handler)
+    signal.signal(signal.SIGTERM, handler)
+    signal.signal(signal.SIGCONT, handler)
+
+    light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
     state_changed = False
 
-    pygame.init()
+    os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
+    os.environ["SDL_VIDEODRIVER"] = "fbcon" # Use Framebuffer instead of X
+
+    try:
+        pygame.init()
+    except pygame.error as ex:
+        timestamp()
+        print >>sys.stderr, "pygame.init() got exception %s" % ex
+        print sys.exc_info()
+        exit(0)
 
     ## Set up the screen
 
