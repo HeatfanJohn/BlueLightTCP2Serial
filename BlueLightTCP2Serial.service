@@ -1,10 +1,11 @@
 [Unit]
 Description=BlueLightTCP2Serial Service to route TCP data to and from RS232 Serial power switch
+After=syslog.target network.target network-online.target graphical.target
 
 [Service]
 Type=simple
-Environment="DISPLAY=:0"
-Environment="XAUTHORITY=/home/pi/.Xauthority"
+#Environment="DISPLAY=:0"
+#Environment="XAUTHORITY=/home/pi/.Xauthority"
 ExecStart=/usr/bin/python /home/pi/BlueLightTCP2Serial/blue_light_tcp_2_serial.py
 Restart=no
 RestartSec=2
