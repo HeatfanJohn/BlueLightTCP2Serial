@@ -147,7 +147,6 @@ def blue_light_tcp_2_serial():
     print >>sys.stderr, 'Starting Up Serial Monitor'
 
     signal.signal(signal.SIGHUP, handler)
-    signal.signal(signal.SIGTERM, handler)
     signal.signal(signal.SIGCONT, handler)
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
