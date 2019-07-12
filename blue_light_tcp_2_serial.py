@@ -146,8 +146,11 @@ def blue_light_tcp_2_serial():
     timestamp()
     print >>sys.stderr, 'Starting Up Serial Monitor'
 
+#   Disable checking membership for SIGHUP, SIGCONT because Windows doesn't define them
+    #pragma pylint: disable=no-member
     signal.signal(signal.SIGHUP, handler)
     signal.signal(signal.SIGCONT, handler)
+    #pragma pylint: enable=no-member
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
     state_changed = False
