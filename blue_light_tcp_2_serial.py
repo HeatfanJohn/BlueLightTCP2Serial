@@ -138,7 +138,7 @@ def update_display(this_surface, this_light_state):
 
     current_time = datetime.datetime.time(current_timestamp)
     text = font50.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
-    textpos = text.get_rect(center=(this_surface.get_width()/2, 1800))
+    textpos = text.get_rect(center=(this_surface.get_width()/2, 180))
     this_surface.blit(text, textpos)
     pygame.display.update()
 
