@@ -127,18 +127,18 @@ def update_display(this_surface, this_light_state):
     this_surface.blit(text, textpos)
 
     text = font25.render("Last updated:", 1, CYAN)
-    textpos = text.get_rect(center=(this_surface.get_width()/2, 80))
+    textpos = text.get_rect(topleft=(0, 80))
     this_surface.blit(text, textpos)
 
     current_timestamp = datetime.datetime.now()
     current_date = datetime.datetime.date(current_timestamp)
     text = font50.render(current_date.strftime("%b %-d %Y"), 1, CYAN)
-    textpos = text.get_rect(center=(this_surface.get_width()/2, 120))
+    textpos = text.get_rect(topleft=(0, 100))
     this_surface.blit(text, textpos)
 
     current_time = datetime.datetime.time(current_timestamp)
     text = font50.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
-    textpos = text.get_rect(center=(this_surface.get_width()/2, 180))
+    textpos = text.get_rect(topleft=(0, 130))
     this_surface.blit(text, textpos)
     pygame.display.update()
 
