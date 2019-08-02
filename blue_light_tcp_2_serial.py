@@ -126,7 +126,7 @@ def update_display(this_surface, this_light_state):
     textpos = text.get_rect(center=(this_surface.get_width()/2, 30))
     this_surface.blit(text, textpos)
 
-    text = font50.render("Last updated:")
+    text = font50.render("Last updated:", 1, CYAN)
     textpos = text.get_rect(center=(this_surface.get_width()/2, 100))
     this_surface.blit(text, textpos)
 
