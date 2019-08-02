@@ -130,11 +130,13 @@ def update_display(this_surface, this_light_state):
     textpos = text.get_rect(center=(this_surface.get_width()/2, 80))
     this_surface.blit(text, textpos)
 
-    current_time = datetime.datetime.time(datetime.datetime.now())
-    text = font50.render(current_time.strftime("%b %-d %Y"), 1, CYAN)
+    current_timestamp = datetime.datetime.now()
+    current_date = datetime.datetime.date(current_timestamp)
+    text = font50.render(current_date.strftime("%b %-d %Y"), 1, CYAN)
     textpos = text.get_rect(center=(this_surface.get_width()/2, 120))
     this_surface.blit(text, textpos)
 
+    current_time = datetime.datetime.time(current_timestamp)
     text = font50.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
     textpos = text.get_rect(center=(this_surface.get_width()/2, 1800))
     this_surface.blit(text, textpos)
