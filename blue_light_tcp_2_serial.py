@@ -297,7 +297,7 @@ def blue_light_tcp_2_serial():
                 sys.exit(1)
 
             finally:
-                if quit_called == False:
+                if not quit_called:
                     pygame.quit()
                     quit_called = True
 
