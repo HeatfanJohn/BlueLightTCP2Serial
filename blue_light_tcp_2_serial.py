@@ -166,6 +166,7 @@ def blue_light_tcp_2_serial():
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
     state_changed = False
+    quit_called = False
 
     os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
     os.environ["SDL_VIDEODRIVER"] = "fbcon" # Use Framebuffer instead of X
@@ -244,6 +245,7 @@ def blue_light_tcp_2_serial():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
+                    quit_called = True
                     sys.exit()
 
             try:
@@ -290,7 +292,14 @@ def blue_light_tcp_2_serial():
                 # Something else happened, handle error, exit, etc.
                 timestamp()
                 print >>sys.stderr, ex
+                pygame.quit()
+                quit_called = True
                 sys.exit(1)
+
+            finally:
+                if quit_called == False:
+                    pygame.quit()
+                    quit_called = True
 
             if state_changed:
                 state_changed = False
