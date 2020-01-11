@@ -296,11 +296,6 @@ def blue_light_tcp_2_serial():
                 quit_called = True
                 sys.exit(1)
 
-            finally:
-                if not quit_called:
-                    pygame.quit()
-                    quit_called = True
-
             if state_changed:
                 state_changed = False
                 update_display(display_surface, light_state)
