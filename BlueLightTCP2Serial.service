@@ -1,6 +1,5 @@
 [Unit]
 Description=BlueLightTCP2Serial Service to route TCP data to and from RS232 Serial power switch
-After=syslog.target network.target network-online.target graphical.target
 
 [Service]
 Type=simple
@@ -15,5 +14,5 @@ Environment=PATH=/usr/bin:/usr/local/bin:/usr/sbin:/bin
 WorkingDirectory=/home/pi/BlueLightTCP2Serial
 
 [Install]
-WantedBy=graphical.target
+WantedBy=multi-user.target
 
