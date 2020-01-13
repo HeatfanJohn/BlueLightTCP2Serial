@@ -148,6 +148,8 @@ def handler(signum, frame):
     timestamp()
     print >>sys.stderr, "Got a %d signal. Doing nothing" % signum
     traceback.print_stack(frame)
+    print >>sys.stderr, "Putting back default_int_handler for %d signal." % signum
+    signal.signal(signum, signal.default_int_handler)
 
 
 def blue_light_tcp_2_serial():
@@ -244,8 +246,9 @@ def blue_light_tcp_2_serial():
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    pygame.quit()
-                    quit_called = True
+                    if not quit_called:
+                        pygame.quit()
+                        quit_called = True
                     sys.exit()
 
             try:
@@ -292,8 +295,9 @@ def blue_light_tcp_2_serial():
                 # Something else happened, handle error, exit, etc.
                 timestamp()
                 print >>sys.stderr, ex
-                pygame.quit()
-                quit_called = True
+                if not quit_called:
+                    pygame.quit()
+                    quit_called = True
                 sys.exit(1)
 
             if state_changed:
