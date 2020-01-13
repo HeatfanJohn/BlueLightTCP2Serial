@@ -148,7 +148,7 @@ def handler(signum, frame):
     timestamp()
     print >>sys.stderr, "Got a %d signal. Doing nothing" % signum
     traceback.print_stack(frame)
-    print >>sys.stderr, "Putting back default_int_handler for %d signal." % signum
+    print >>sys.stderr, "Putting back default_int_handler for signal #%d." % signum
     signal.signal(signum, signal.default_int_handler)
 
 
