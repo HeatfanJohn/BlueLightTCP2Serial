@@ -13,6 +13,7 @@ import pygame
 from pygame.locals import QUIT
 
 DISPLAY_TIMESTAMPS = False
+TRAP_KEYBOARD_INTERRUPT = False
 SERIALPORT = "/dev/ttyUSB0"
 BAUDRATE = 9600
 OFF = "Off"
@@ -177,7 +178,8 @@ def blue_light_tcp_2_serial():
     #pragma pylint: disable=no-member
     signal.signal(signal.SIGHUP, handler)
     signal.signal(signal.SIGCONT, handler)
-    signal.signal(signal.SIGINT, keyboard_interrupt_handler)
+    if TRAP_KEYBOARD_INTERRUPT:
+        signal.signal(signal.SIGINT, keyboard_interrupt_handler)
     #pragma pylint: enable=no-member
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
@@ -186,10 +188,10 @@ def blue_light_tcp_2_serial():
 
     os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
     os.environ["SDL_VIDEODRIVER"] = "fbcon" # Use Framebuffer instead of X
-    os.environ['SDL_AUDIODRIVER'] = 'alsa'  # See https://raspberrypi.stackexchange.com/a/83912/1311
+#   os.environ['SDL_AUDIODRIVER'] = 'alsa'  # See https://raspberrypi.stackexchange.com/a/83912/1311
 
     try:
-        pygame.init()
+        pygame.display.init()
     except pygame.error as ex:
         timestamp()
         print >>sys.stderr, "pygame.init() got exception %s" % ex
