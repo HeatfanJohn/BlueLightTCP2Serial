@@ -206,7 +206,7 @@ def blue_light_tcp_2_serial():
 
     ## Set up the screen
 
-    display_surface = pygame.display.set_mode((0,0))
+    display_surface = pygame.display.set_mode((0, 0))
     pygame.mouse.set_visible(0)
     pygame.display.set_caption('BlueLightMonitor')
     update_display(display_surface, light_state)
