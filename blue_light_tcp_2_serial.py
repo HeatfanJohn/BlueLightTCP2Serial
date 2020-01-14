@@ -14,6 +14,8 @@ from pygame.locals import QUIT
 
 DISPLAY_TIMESTAMPS = False
 TRAP_KEYBOARD_INTERRUPT = True
+PRINT_TRACEBACK = False
+
 SERIALPORT = "/dev/ttyUSB0"
 BAUDRATE = 9600
 OFF = "Off"
@@ -157,7 +159,9 @@ def keyboard_interrupt_handler(signum, frame):
     """Ensure that pygame.quit() is called at termination - SIGINT from systemd"""
     timestamp()
     print >>sys.stderr, "KbdInt: signal #%d has been caught. Call pygame.quit()" % signum
-    traceback.print_stack(frame)
+
+    if PRINT_TRACEBACK:
+        traceback.print_stack(frame)
 
     pygame.quit()
 
