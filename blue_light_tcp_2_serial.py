@@ -192,6 +192,7 @@ def blue_light_tcp_2_serial():
 
     try:
         pygame.display.init()
+        pygame.font.init()
     except pygame.error as ex:
         timestamp()
         print >>sys.stderr, "pygame.init() got exception %s" % ex
