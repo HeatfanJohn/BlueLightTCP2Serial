@@ -152,6 +152,17 @@ def handler(signum, frame):
     signal.signal(signum, signal.default_int_handler)
 
 
+def keyboardInterruptHandler(signal, frame):
+    timestamp()
+    print("KeyboardInterrupt: (ID: {}) has been caught. Call pygame.quit() ...".format(signal),
+        file=sys.stderr)
+    pygame.quit()
+    timestamp()
+    print("KeyboardInterrupt: pygame.quit() returned ... now exiting ...".format(signal),
+        file=sys.stderr)
+    exit(0)
+
+
 def blue_light_tcp_2_serial():
     """ Bidirectionally read/write date from a TCP connection
     and echo to a USB Serial port.
@@ -164,6 +175,7 @@ def blue_light_tcp_2_serial():
     #pragma pylint: disable=no-member
     signal.signal(signal.SIGHUP, handler)
     signal.signal(signal.SIGCONT, handler)
+    signal.signal(signal.SIGINT, keyboardInterruptHandler)
     #pragma pylint: enable=no-member
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
