@@ -155,7 +155,7 @@ def handler(signum, frame):
 def keyboard_interrupt_handler(signum, frame):
     """Ensure that pygame.quit() is called at termination - SIGINT from systemd"""
     timestamp()
-    print >>sys.stderr, "KeyboardInterrupt: signal #%d has been caught. Call pygame.quit()q" % signum
+    print >>sys.stderr, "KbdInt: signal #%d has been caught. Call pygame.quit()" % signum
     traceback.print_stack(frame)
 
     pygame.quit()
@@ -186,7 +186,7 @@ def blue_light_tcp_2_serial():
 
     os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
     os.environ["SDL_VIDEODRIVER"] = "fbcon" # Use Framebuffer instead of X
-    os.environ['SDL_AUDIODRIVER'] = 'dsp'   # See https://raspberrypi.stackexchange.com/a/83912/1311
+    os.environ['SDL_AUDIODRIVER'] = 'alsa'  # See https://raspberrypi.stackexchange.com/a/83912/1311
 
     try:
         pygame.init()
