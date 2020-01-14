@@ -152,14 +152,16 @@ def handler(signum, frame):
     signal.signal(signum, signal.default_int_handler)
 
 
-def keyboardInterruptHandler(signal, frame):
+def keyboard_interrupt_handler(signum, frame):
+    """Ensure that pygame.quit() is called at termination - SIGINT from systemd"""
     timestamp()
-    print("KeyboardInterrupt: (ID: {}) has been caught. Call pygame.quit() ...".format(signal),
-        file=sys.stderr)
+    print >>sys.stderr, "KeyboardInterrupt: signal #%d has been caught. Call pygame.quit()" % signum
+    traceback.print_stack(frame)
+
     pygame.quit()
+
     timestamp()
-    print("KeyboardInterrupt: pygame.quit() returned ... now exiting ...".format(signal),
-        file=sys.stderr)
+    print >>sys.stderr, "KeyboardInterrupt: pygame.quit() returned ... now exiting ..."
     exit(0)
 
 
@@ -175,7 +177,7 @@ def blue_light_tcp_2_serial():
     #pragma pylint: disable=no-member
     signal.signal(signal.SIGHUP, handler)
     signal.signal(signal.SIGCONT, handler)
-    signal.signal(signal.SIGINT, keyboardInterruptHandler)
+    signal.signal(signal.SIGINT, keyboard_interrupt_handler)
     #pragma pylint: enable=no-member
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
