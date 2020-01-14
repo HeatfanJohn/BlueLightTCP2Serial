@@ -13,7 +13,7 @@ import pygame
 from pygame.locals import QUIT
 
 DISPLAY_TIMESTAMPS = False
-TRAP_KEYBOARD_INTERRUPT = False
+TRAP_KEYBOARD_INTERRUPT = True
 SERIALPORT = "/dev/ttyUSB0"
 BAUDRATE = 9600
 OFF = "Off"
@@ -180,6 +180,7 @@ def blue_light_tcp_2_serial():
     signal.signal(signal.SIGCONT, handler)
     if TRAP_KEYBOARD_INTERRUPT:
         signal.signal(signal.SIGINT, keyboard_interrupt_handler)
+        signal.signal(signal.SIGTERM, keyboard_interrupt_handler)
     #pragma pylint: enable=no-member
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
