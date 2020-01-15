@@ -120,27 +120,27 @@ def update_display(this_surface, this_light_state):
     """
     this_surface.fill(BLACK)
 
-    font25 = pygame.font.Font(None, 25)
-    font50 = pygame.font.Font(None, 50)
-    font75 = pygame.font.Font(None, 75)
-    text = font75.render(this_light_state[0] + "  " + \
+    font_sm = pygame.font.Font(None, 50)
+    font_md = pygame.font.Font(None, 75)
+    font_lg = pygame.font.Font(None, 125)
+    text = font_lg.render(this_light_state[0] + "  " + \
         this_light_state[1] + "  " + \
         this_light_state[2], 1, BLUE)
     textpos = text.get_rect(center=(this_surface.get_width()/2, 30))
     this_surface.blit(text, textpos)
 
-    text = font25.render("Last updated:", 1, CYAN)
+    text = font_sm.render("Last updated:", 1, CYAN)
     textpos = text.get_rect(topleft=(0, 80))
     this_surface.blit(text, textpos)
 
     current_timestamp = datetime.datetime.now()
     current_date = datetime.datetime.date(current_timestamp)
-    text = font50.render(current_date.strftime("%b %-d %Y"), 1, CYAN)
+    text = font_md.render(current_date.strftime("%b %-d %Y"), 1, CYAN)
     textpos = text.get_rect(topleft=(0, 100))
     this_surface.blit(text, textpos)
 
     current_time = datetime.datetime.time(current_timestamp)
-    text = font50.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
+    text = font_md.render(current_time.strftime("%I:%M:%S %p"), 1, CYAN)
     textpos = text.get_rect(topleft=(0, 135))
     this_surface.blit(text, textpos)
     pygame.display.update()
