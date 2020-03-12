@@ -32,7 +32,7 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 CYAN = (0, 255, 255)
 
-# Bind the socket to port 1000 on all IPv4 addresses
+# Bind the socket to port 1000 on all IPv4 and IPv6 addresses
 SERVER_ADDRESS = ('::', 1000)
 
 
