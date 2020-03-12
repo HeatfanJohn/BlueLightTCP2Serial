@@ -188,7 +188,6 @@ def blue_light_tcp_2_serial():
     #pragma pylint: enable=no-member
 
     light_state = [OFF, OFF, OFF]           # Array to maintain state of each light
-    state_changed = False
     quit_called = False
 
     os.environ["SDL_FBDEV"] = "/dev/fb0"    # Use Framebuffer 0
@@ -309,8 +308,9 @@ def blue_light_tcp_2_serial():
                         continue
 
                     elif char == CR:
-                        state_changed = change_state(serial_data, light_state)
                         serial_data = ''
+                        if change_state(serial_data, light_state):
+                            update_display(display_surface, light_state)
                     else:
                         serial_data = serial_data + char
 
@@ -322,10 +322,6 @@ def blue_light_tcp_2_serial():
                     pygame.quit()
                     quit_called = True
                 sys.exit(1)
-
-            if state_changed:
-                state_changed = False
-                update_display(display_surface, light_state)
 
 
 if __name__ == '__main__':
