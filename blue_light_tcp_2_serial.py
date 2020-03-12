@@ -236,7 +236,7 @@ def blue_light_tcp_2_serial():
         sys.exit(1)
 
     # Create a TCP/IP socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(0, socket.SOCK_STREAM)
 
     # Then bind() is used to associate the socket with the server address.i
     # In this case, the address is localhost, referring to the current server,
