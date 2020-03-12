@@ -34,8 +34,9 @@ def simulate_serial_response(in_serial, in_input, in_light_state):
     if len(in_input) == 9:
         if in_input[6].isdigit() and int(in_input[6]) <= len(in_light_state)-1:
             if in_input[7] == '?':
-                in_serial.write(LF + 'Complete' + CR + LF + \
-                    'Plug ' + in_input[6] + ' ' + in_light_state[int(in_input[6])] + CR)
+                in_serial.write('Plug ' + in_input[6] + ' ' \
+                     + in_light_state[int(in_input[6])] + CR + LF \
+                     + 'Complete' + CR + LF)
                 return
 
             elif in_input[7].isdigit():
@@ -47,6 +48,10 @@ def simulate_serial_response(in_serial, in_input, in_light_state):
                     timestamp()
                     print >>sys.stderr, 'Invalid on/off state: "' + in_input + '"'
                     return
+                    
+                in_serial.write('Plug ' + in_input[6] + ' ' \
+                     + in_light_state[int(in_input[6])] + CR + LF \
+                     + 'Complete' + CR + LF)
 
                 timestamp()
                 print >>sys.stderr, 'Light ' + in_input[6] \
