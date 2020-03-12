@@ -33,7 +33,7 @@ BLUE = (0, 0, 255)
 CYAN = (0, 255, 255)
 
 # Bind the socket to port 1000 on all IPv4 addresses
-SERVER_ADDRESS = ('0.0.0.0', 1000)
+SERVER_ADDRESS = ('::', 1000)
 
 
 def read_from_serial(this_serial, this_connection):
