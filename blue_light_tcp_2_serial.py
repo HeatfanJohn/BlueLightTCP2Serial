@@ -308,9 +308,9 @@ def blue_light_tcp_2_serial():
                         continue
 
                     elif char == CR:
-                        serial_data = ''
                         if change_state(serial_data, light_state):
                             update_display(display_surface, light_state)
+                        serial_data = ''
                     else:
                         serial_data = serial_data + char
 
