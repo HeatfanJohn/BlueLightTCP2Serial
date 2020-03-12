@@ -48,7 +48,7 @@ def simulate_serial_response(in_serial, in_input, in_light_state):
                     timestamp()
                     print >>sys.stderr, 'Invalid on/off state: "' + in_input + '"'
                     return
-                    
+
                 in_serial.write('Plug ' + in_input[6] + ' ' \
                      + in_light_state[int(in_input[6])] + CR + LF \
                      + 'Complete' + CR + LF)
