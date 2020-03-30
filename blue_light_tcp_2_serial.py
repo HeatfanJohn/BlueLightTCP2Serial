@@ -8,6 +8,7 @@ import sys
 import signal
 import traceback
 import serial
+import errno
 
 import pygame
 from pygame.locals import QUIT
@@ -318,9 +319,18 @@ def blue_light_tcp_2_serial():
                 # Something else happened, handle error, exit, etc.
                 timestamp()
                 print >>sys.stderr, ex
+
+                if ex.errno in (errno.ECONNRESET, errno.ECONNABORTED):
+                    timestamp()
+                    print >>sys.stderr, 'no more data from', client_address
+                    break
+
                 if not quit_called:
                     pygame.quit()
+                    timestamp()
+                    print >>sys.stderr, 'pygame.quit() called', client_address
                     quit_called = True
+
                 sys.exit(1)
 
 
